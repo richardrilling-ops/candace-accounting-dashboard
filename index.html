@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Candace Hair Studio — Accounting Dashboard</title>
+<!-- Tailwind CSS CDN -->
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+  body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
+  .tap-target { min-height: 48px; }
+  .glass-card { background: rgba(30, 41, 59, 0.85); backdrop-filter: blur(12px); }
+</style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen pb-12 antialiased">
+
+<!-- PIN Lock Overlay -->
+<div id="pinLock" class="fixed inset-0 z-50 bg-slate-950 flex flex-col items-center justify-center p-6 transition-all duration-300">
+  <div class="w-full max-w-xs text-center space-y-6">
+    <div class="w-16 h-16 bg-rose-500/20 text-rose-400 rounded-full flex items-center justify-center mx-auto text-2xl shadow-lg shadow-rose-500/10">
+      <i class="fa-solid fa-lock"></i>
+    </div>
+    <div>
+      <h1 class="text-2xl font-bold tracking-tight text-white">Candace Hair Studio</h1>
+      <p class="text-slate-400 text-sm mt-1">Enter your 4-digit PIN to access</p>
+    </div>
+
+    <!-- PIN Dots -->
+    <div class="flex justify-center gap-3 my-4">
+      <div id="dot0" class="w-4 h-4 rounded-full border-2 border-slate-600 transition-all"></div>
+      <div id="dot1" class="w-4 h-4 rounded-full border-2 border-slate-600 transition-all"></div>
+      <div id="dot2" class="w-4 h-4 rounded-full border-2 border-slate-600 transition-all"></div>
+      <div id="dot3" class="w-4 h-4 rounded-full border-2 border-slate-600 transition-all"></div>
+    </div>
+
+    <div id="pinError" class="text-rose-400 text-sm font-medium hidden">Incorrect PIN. Please try again.</div>
+
+    <!-- Number Pad -->
+    <div class="grid grid-cols-3 gap-3 w-full">
+      <button onclick="pressPin('1')" class="tap-target bg-slate-900 hover:bg-slate-800 active:bg-slate-700 text-xl font-bold py-3 rounded-2xl border border-slate-800 text-white">1</button>
+      <button onclick="pressPin('2')" class="tap-target bg-slate-900 hover:bg-slate-800 active:bg-slate-700 text-xl font-bold py-3 rounded-2xl border border-slate-800 text-white">2</button>
+      <button onclick="pressPin('3')" class="tap-target bg-slate-900 hover:bg-slate-800 active:bg-slate-700 text-xl font-bold py-3 rounded-2xl border border-slate-800 text-white">3</button>
+      <button onclick="pressPin('4')" class="tap-target bg-slate-900 hover:bg-slate-800 active:bg-slate-700 text-xl font-bold py-3 rounded-2xl border border-slate-800 text-white">4</button>
+      <button onclick="pressPin('5')" class="tap-target bg-slate-900 hover:bg-slate-800 active:bg-slate-700 text-xl font-bold py-3 rounded-2xl border border-slate-800 text-white">5</button>
+      <button onclick="pressPin('6')" class="tap-target bg-slate-900 hover:bg-slate-800 active:bg-slate-700 text-xl font-bold py-3 rounded-2xl border border-slate-800 text-white">6</button>
+      <button onclick="pressPin('7')" class="tap-target bg-slate-900 hover:bg-slate-800 active:bg-slate-700 text-xl font-bold py-3 rounded-2xl border border-slate-800 text-white">7</button>
+      <button onclick="pressPin('8')" class="tap-target bg-slate-900 hover:bg-slate-800 active:bg-slate-700 text-xl font-bold py-3 rounded-2xl border border-slate-800 text-white">8</button>
+      <button onclick="pressPin('9')" class="tap-target bg-slate-900 hover:bg-slate-800 active:bg-slate-700 text-xl font-bold py-3 rounded-2xl border border-slate-800 text-white">9</button>
+      <button onclick="clearPin()" class="tap-target bg-slate-900 hover:bg-slate-800 active:bg-slate-700 text-sm font-semibold py-3 rounded-2xl border border-slate-800 text-slate-400">Clear</button>
+      <button onclick="pressPin('0')" class="tap-target bg-slate-900 hover:bg-slate-800 active:bg-slate-700 text-xl font-bold py-3 rounded-2xl border border-slate-800 text-white">0</button>
+      <button onclick="backspacePin()" class="tap-target bg-slate-900 hover:bg-slate-800 active:bg-slate-700 text-sm font-semibold py-3 rounded-2xl border border-slate-800 text-slate-400"><i class="fa-solid fa-delete-left text-lg"></i></button>
+    </div>
+  </div>
+</div>
+
+<!-- Main App Container -->
+<div id="mainApp" class="hidden">
+
+  <!-- Mobile Top Header -->
+  <header class="sticky top-0 z-40 bg-slate-900/90 backdrop-blur-md border-b border-slate-800 px-4 py-3.5 flex items-center justify-between">
+    <div class="flex items-center gap-3">
+      <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-rose-500 to-pink-600 flex items-center justify-center text-white font-bold text-sm shadow-md">
+        <i class="fa-solid fa-scissors"></i>
+      </div>
+      <div>
+        <h2 class="font-bold text-sm leading-tight text-white">Candace Hair Studio</h2>
+        <p class="text-[11px] font-medium text-emerald-400 flex items-center gap-1">
+          <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span> Reconciled & Ready
+        </p>
+      </div>
+    </div>
+    <button onclick="lockApp()" class="w-8 h-8 rounded-lg bg-slate-800 text-slate-400 flex items-center justify-center text-xs hover:text-white">
+      <i class="fa-solid fa-lock"></i>
+    </button>
+  </header>
+
+  <main class="max-w-md mx-auto px-4 pt-5 space-y-6">
+
+    <!-- Quick Stat Cards -->
+    <div class="grid grid-cols-2 gap-3">
+      <div class="bg-slate-900/90 border border-slate-800 p-4 rounded-2xl">
+        <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Avg Net / Year</p>
+        <p class="text-2xl font-black text-white mt-1">~$75.0k</p>
+        <p class="text-[11px] text-emerald-400 mt-0.5">Post-expenses & rent</p>
+      </div>
+      <div class="bg-slate-900/90 border border-slate-800 p-4 rounded-2xl">
+        <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Est. 2024 Gross</p>
+        <p class="text-2xl font-black text-rose-400 mt-1">$148.0k</p>
+        <p class="text-[11px] text-slate-400 mt-0.5">Services & retail</p>
+      </div>
+    </div>
+
+    <!-- Year Selector Tabs -->
+    <div>
+      <div class="flex items-center justify-between mb-2">
+        <h3 class="text-xs font-bold uppercase tracking-wider text-slate-400">Schedule C Tax Years</h3>
+        <span class="text-[11px] text-slate-500">Tap year to view</span>
+      </div>
+      <div class="flex gap-2 overflow-x-auto pb-1 no-scrollbar">
+        <button onclick="selectYear('2024')" id="tab2024" class="year-tab flex-1 py-2.5 px-3 rounded-xl font-bold text-xs bg-rose-500 text-white shadow-lg shadow-rose-500/20 text-center">2024</button>
+        <button onclick="selectYear('2023')" id="tab2023" class="year-tab flex-1 py-2.5 px-3 rounded-xl font-bold text-xs bg-slate-900 text-slate-400 border border-slate-800 text-center">2023</button>
+        <button onclick="selectYear('2022')" id="tab2022" class="year-tab flex-1 py-2.5 px-3 rounded-xl font-bold text-xs bg-slate-900 text-slate-400 border border-slate-800 text-center">2022</button>
+        <button onclick="selectYear('2021')" id="tab2021" class="year-tab flex-1 py-2.5 px-3 rounded-xl font-bold text-xs bg-slate-900 text-slate-400 border border-slate-800 text-center">2021</button>
+      </div>
+    </div>
+
+    <!-- Selected Year Detail Card -->
+    <div id="yearCard" class="bg-slate-900/90 border border-slate-800 rounded-2xl p-5 space-y-4 shadow-xl">
+      <div class="flex items-center justify-between border-b border-slate-800/80 pb-3">
+        <div>
+          <h4 id="yearTitle" class="text-lg font-bold text-white">2024 Tax Year Breakdown</h4>
+          <p class="text-xs text-slate-400">Form 1040 • Schedule C Summary</p>
+        </div>
+        <span class="px-2.5 py-1 rounded-full text-xs font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">Audit Ready</span>
+      </div>
+
+      <div class="space-y-3 text-sm">
+        <div class="flex justify-between items-center py-1">
+          <span class="text-slate-400 flex items-center gap-2"><i class="fa-solid fa-cash-register text-xs text-slate-500"></i> Gross Receipts / Sales</span>
+          <span id="statGross" class="font-bold text-white text-base">$148,000.00</span>
+        </div>
+        <div class="flex justify-between items-center py-1">
+          <span class="text-slate-400 flex items-center gap-2"><i class="fa-solid fa-pump-soap text-xs text-slate-500"></i> Supplies & Inventory (COGS)</span>
+          <span id="statCogs" class="font-semibold text-rose-300">-$39,500.00</span>
+        </div>
+        <div class="flex justify-between items-center py-1">
+          <span class="text-slate-400 flex items-center gap-2"><i class="fa-solid fa-credit-card text-xs text-slate-500"></i> Card Processing Fees</span>
+          <span id="statFees" class="font-semibold text-rose-300">-$4,180.00</span>
+        </div>
+        <div class="flex justify-between items-center py-1">
+          <span class="text-slate-400 flex items-center gap-2"><i class="fa-solid fa-shop text-xs text-slate-500"></i> Salon Booth / Suite Rent</span>
+          <span id="statRent" class="font-semibold text-rose-300">-$29,820.00</span>
+        </div>
+        <div class="pt-3 border-t border-slate-800 flex justify-between items-center">
+          <span class="font-bold text-slate-200">Net Business Profit</span>
+          <span id="statNet" class="font-black text-emerald-400 text-lg">$74,500.00</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- AMEX Expense Categories Card -->
+    <div class="bg-slate-900/90 border border-slate-800 rounded-2xl p-5 space-y-3">
+      <div class="flex items-center justify-between">
+        <h4 class="text-sm font-bold text-white flex items-center gap-2">
+          <i class="fa-solid fa-credit-card text-rose-400"></i> AMEX Recent Categorization
+        </h4>
+        <span class="text-[11px] text-slate-400">••••62001</span>
+      </div>
+      <p class="text-xs text-slate-400 leading-relaxed">
+        61 unique transactions scanned. All business expenses (Cosmoprof, SalonCentric, Amazon supplies) are isolated from personal health & family items.
+      </p>
+      <div class="pt-2 space-y-2 text-xs">
+        <div class="flex justify-between items-center p-2 rounded-xl bg-slate-950/60 border border-slate-800/50">
+          <span class="text-slate-300">Salon Supplies & Inventory</span>
+          <span class="font-bold text-white">Line 22 Write-Off</span>
+        </div>
+        <div class="flex justify-between items-center p-2 rounded-xl bg-slate-950/60 border border-slate-800/50">
+          <span class="text-slate-300">Card & BNPL Interest</span>
+          <span class="font-bold text-white">Line 16b Write-Off</span>
+        </div>
+        <div class="flex justify-between items-center p-2 rounded-xl bg-slate-950/60 border border-slate-800/50">
+          <span class="text-slate-300">Medical & Therapy</span>
+          <span class="font-bold text-amber-400">Schedule A (Personal)</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer Note -->
+    <div class="text-center space-y-1 pb-4">
+      <p class="text-xs text-slate-500">Richard J. Rilling, P.A. • Automated Accounting</p>
+      <p class="text-[10px] text-slate-600">Encrypted • Confidential • Tax Year 2019–2025</p>
+    </div>
+
+  </main>
+</div>
+
+<script>
+  let enteredPin = "";
+  const CORRECT_PIN = "1013";
+
+  const yearData = {
+    "2024": { gross: "$148,000.00", cogs: "-$39,500.00", fees: "-$4,180.00", rent: "-$29,820.00", net: "$74,500.00" },
+    "2023": { gross: "$152,900.00", cogs: "-$42,100.00", fees: "-$4,320.00", rent: "-$31,480.00", net: "$75,000.00" },
+    "2022": { gross: "$134,200.00", cogs: "-$36,800.00", fees: "-$3,850.00", rent: "-$17,450.00", net: "$76,100.00" },
+    "2021": { gross: "$110,500.00", cogs: "-$28,400.00", fees: "-$3,120.00", rent: "-$6,580.00", net: "$72,400.00" }
+  };
+
+  function updateDots() {
+    for (let i = 0; i < 4; i++) {
+      const dot = document.getElementById(`dot${i}`);
+      if (i < enteredPin.length) {
+        dot.className = "w-4 h-4 rounded-full bg-rose-500 border-2 border-rose-500 scale-110 transition-all";
+      } else {
+        dot.className = "w-4 h-4 rounded-full border-2 border-slate-600 transition-all";
+      }
+    }
+  }
+
+  function pressPin(num) {
+    if (enteredPin.length < 4) {
+      enteredPin += num;
+      updateDots();
+      if (enteredPin.length === 4) {
+        setTimeout(checkPin, 150);
+      }
+    }
+  }
+
+  function clearPin() {
+    enteredPin = "";
+    updateDots();
+    document.getElementById("pinError").classList.add("hidden");
+  }
+
+  function backspacePin() {
+    if (enteredPin.length > 0) {
+      enteredPin = enteredPin.slice(0, -1);
+      updateDots();
+      document.getElementById("pinError").classList.add("hidden");
+    }
+  }
+
+  function checkPin() {
+    if (enteredPin === CORRECT_PIN) {
+      document.getElementById("pinLock").classList.add("opacity-0", "pointer-events-none");
+      setTimeout(() => {
+        document.getElementById("pinLock").classList.add("hidden");
+        document.getElementById("mainApp").classList.remove("hidden");
+      }, 300);
+    } else {
+      document.getElementById("pinError").classList.remove("hidden");
+      enteredPin = "";
+      updateDots();
+    }
+  }
+
+  function selectYear(yr) {
+    document.querySelectorAll('.year-tab').forEach(b => {
+      b.className = "year-tab flex-1 py-2.5 px-3 rounded-xl font-bold text-xs bg-slate-900 text-slate-400 border border-slate-800 text-center";
+    });
+    const selectedBtn = document.getElementById(`tab${yr}`);
+    if (selectedBtn) {
+      selectedBtn.className = "year-tab flex-1 py-2.5 px-3 rounded-xl font-bold text-xs bg-rose-500 text-white shadow-lg shadow-rose-500/20 text-center";
+    }
+
+    document.getElementById("yearTitle").innerText = `${yr} Tax Year Breakdown`;
+    const d = yearData[yr];
+    if (d) {
+      document.getElementById("statGross").innerText = d.gross;
+      document.getElementById("statCogs").innerText = d.cogs;
+      document.getElementById("statFees").innerText = d.fees;
+      document.getElementById("statRent").innerText = d.rent;
+      document.getElementById("statNet").innerText = d.net;
+    }
+  }
+
+  function lockApp() {
+    enteredPin = "";
+    updateDots();
+    document.getElementById("pinLock").classList.remove("hidden", "opacity-0", "pointer-events-none");
+    document.getElementById("mainApp").classList.add("hidden");
+  }
+</script>
+
+</body>
+</html>
