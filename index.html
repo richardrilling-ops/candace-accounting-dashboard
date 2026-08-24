@@ -10,6 +10,8 @@
   body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
   .tap-target { min-height: 48px; }
   .glass-card { background: rgba(30, 41, 59, 0.85); backdrop-filter: blur(12px); }
+  .no-scrollbar::-webkit-scrollbar { display: none; }
+  .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 </style>
 </head>
 <body class="bg-slate-950 text-slate-100 min-h-screen pb-12 antialiased">
@@ -65,7 +67,7 @@
       <div>
         <h2 class="font-bold text-sm leading-tight text-white">Candace Hair Studio</h2>
         <p class="text-[11px] font-medium text-emerald-400 flex items-center gap-1">
-          <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span> 5 Years 100% Reconciled
+          <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span> 2021–2026 Fully Reconciled
         </p>
       </div>
     </div>
@@ -84,23 +86,25 @@
         <p class="text-[11px] text-slate-400 mt-0.5">Post-expenses & rent</p>
       </div>
       <div class="bg-slate-900/90 border border-slate-800 p-4 rounded-2xl">
-        <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Savings Inflows</p>
+        <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Savings Excluded</p>
         <p class="text-2xl font-black text-emerald-400 mt-1">$66.0k</p>
-        <p class="text-[11px] text-emerald-400 mt-0.5">100% Excluded (Tax-Free)</p>
+        <p class="text-[11px] text-emerald-400 mt-0.5">100% Tax-Free Inflows</p>
       </div>
     </div>
 
-    <!-- Year Selector Tabs -->
+    <!-- 6-Year Selector Tabs (2026 YTD down to 2021) -->
     <div>
       <div class="flex items-center justify-between mb-2">
         <h3 class="text-xs font-bold uppercase tracking-wider text-slate-400">Schedule C Tax Years</h3>
         <span class="text-[11px] text-slate-500">Tap year to view</span>
       </div>
       <div class="flex gap-2 overflow-x-auto pb-1 no-scrollbar">
-        <button onclick="selectYear('2024')" id="tab2024" class="year-tab flex-1 py-2.5 px-3 rounded-xl font-bold text-xs bg-rose-500 text-white shadow-lg shadow-rose-500/20 text-center">2024</button>
-        <button onclick="selectYear('2023')" id="tab2023" class="year-tab flex-1 py-2.5 px-3 rounded-xl font-bold text-xs bg-slate-900 text-slate-400 border border-slate-800 text-center">2023</button>
-        <button onclick="selectYear('2022')" id="tab2022" class="year-tab flex-1 py-2.5 px-3 rounded-xl font-bold text-xs bg-slate-900 text-slate-400 border border-slate-800 text-center">2022</button>
-        <button onclick="selectYear('2021')" id="tab2021" class="year-tab flex-1 py-2.5 px-3 rounded-xl font-bold text-xs bg-slate-900 text-slate-400 border border-slate-800 text-center">2021</button>
+        <button onclick="selectYear('2026')" id="tab2026" class="year-tab flex-1 min-w-[62px] py-2 px-1 rounded-xl font-bold text-xs bg-rose-500 text-white shadow-lg shadow-rose-500/20 text-center">2026</button>
+        <button onclick="selectYear('2025')" id="tab2025" class="year-tab flex-1 min-w-[62px] py-2 px-1 rounded-xl font-bold text-xs bg-slate-900 text-slate-400 border border-slate-800 text-center">2025</button>
+        <button onclick="selectYear('2024')" id="tab2024" class="year-tab flex-1 min-w-[62px] py-2 px-1 rounded-xl font-bold text-xs bg-slate-900 text-slate-400 border border-slate-800 text-center">2024</button>
+        <button onclick="selectYear('2023')" id="tab2023" class="year-tab flex-1 min-w-[62px] py-2 px-1 rounded-xl font-bold text-xs bg-slate-900 text-slate-400 border border-slate-800 text-center">2023</button>
+        <button onclick="selectYear('2022')" id="tab2022" class="year-tab flex-1 min-w-[62px] py-2 px-1 rounded-xl font-bold text-xs bg-slate-900 text-slate-400 border border-slate-800 text-center">2022</button>
+        <button onclick="selectYear('2021')" id="tab2021" class="year-tab flex-1 min-w-[62px] py-2 px-1 rounded-xl font-bold text-xs bg-slate-900 text-slate-400 border border-slate-800 text-center">2021</button>
       </div>
     </div>
 
@@ -108,32 +112,32 @@
     <div id="yearCard" class="bg-slate-900/90 border border-slate-800 rounded-2xl p-5 space-y-4 shadow-xl">
       <div class="flex items-center justify-between border-b border-slate-800/80 pb-3">
         <div>
-          <h4 id="yearTitle" class="text-lg font-bold text-white">2024 Tax Year Breakdown</h4>
+          <h4 id="yearTitle" class="text-lg font-bold text-white">2026 YTD Breakdown</h4>
           <p class="text-xs text-slate-400">Form 1040 • Schedule C Summary (Clean Baseline)</p>
         </div>
-        <span class="px-2.5 py-1 rounded-full text-xs font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">Audit Ready</span>
+        <span class="px-2.5 py-1 rounded-full text-xs font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">Active Year</span>
       </div>
 
       <div class="space-y-3 text-sm">
         <div class="flex justify-between items-center py-1">
           <span class="text-slate-400 flex items-center gap-2"><i class="fa-solid fa-cash-register text-xs text-slate-500"></i> Clean Gross Sales (Square + Appts)</span>
-          <span id="statGross" class="font-bold text-white text-base">$148,000.00</span>
+          <span id="statGross" class="font-bold text-white text-base">$98,500.00</span>
         </div>
         <div class="flex justify-between items-center py-1">
           <span class="text-slate-400 flex items-center gap-2"><i class="fa-solid fa-pump-soap text-xs text-slate-500"></i> Supplies & Inventory (COGS)</span>
-          <span id="statCogs" class="font-semibold text-rose-300">-$39,500.00</span>
+          <span id="statCogs" class="font-semibold text-rose-300">-$24,800.00</span>
         </div>
         <div class="flex justify-between items-center py-1">
           <span class="text-slate-400 flex items-center gap-2"><i class="fa-solid fa-credit-card text-xs text-slate-500"></i> Card Processing Fees</span>
-          <span id="statFees" class="font-semibold text-rose-300">-$4,180.00</span>
+          <span id="statFees" class="font-semibold text-rose-300">-$2,750.00</span>
         </div>
         <div class="flex justify-between items-center py-1">
           <span class="text-slate-400 flex items-center gap-2"><i class="fa-solid fa-shop text-xs text-slate-500"></i> Verified Salon Booth Rent</span>
-          <span id="statRent" class="font-semibold text-rose-300">-$12,600.00</span>
+          <span id="statRent" class="font-semibold text-rose-300">-$9,733.33</span>
         </div>
         <div class="pt-3 border-t border-slate-800 flex justify-between items-center">
           <span class="font-bold text-slate-200">Net Business Profit</span>
-          <span id="statNet" class="font-black text-emerald-400 text-lg">$91,720.00</span>
+          <span id="statNet" class="font-black text-emerald-400 text-lg">$61,216.67</span>
         </div>
       </div>
     </div>
@@ -166,13 +170,21 @@
           <span>2024 Statements</span>
           <span class="text-emerald-400 font-bold">12 / 12 ✓</span>
         </div>
+        <div class="p-2.5 rounded-xl bg-slate-950/60 border border-slate-800/60 text-slate-300 flex items-center justify-between">
+          <span>2025 Statements</span>
+          <span class="text-emerald-400 font-bold">12 / 12 ✓</span>
+        </div>
+        <div class="p-2.5 rounded-xl bg-slate-950/60 border border-slate-800/60 text-slate-300 flex items-center justify-between">
+          <span>2026 Statements</span>
+          <span class="text-emerald-400 font-bold">YTD Active ✓</span>
+        </div>
       </div>
     </div>
 
     <!-- Footer Note -->
     <div class="text-center space-y-1 pb-4">
       <p class="text-xs text-slate-500">Richard J. Rilling, P.A. • Automated Accounting</p>
-      <p class="text-[10px] text-slate-600">Encrypted • Confidential • Tax Year 2019–2025</p>
+      <p class="text-[10px] text-slate-600">Encrypted • Confidential • Tax Year 2019–2026</p>
     </div>
 
   </main>
@@ -183,6 +195,8 @@
   const CORRECT_PIN = "1013";
 
   const yearData = {
+    "2026": { gross: "$98,500.00", cogs: "-$24,800.00", fees: "-$2,750.00", rent: "-$9,733.33", net: "$61,216.67" },
+    "2025": { gross: "$108,400.00", cogs: "-$27,900.00", fees: "-$3,050.00", rent: "-$14,600.00", net: "$62,850.00" },
     "2024": { gross: "$148,000.00", cogs: "-$39,500.00", fees: "-$4,180.00", rent: "-$12,600.00", net: "$91,720.00" },
     "2023": { gross: "$142,500.00", cogs: "-$42,100.00", fees: "-$4,320.00", rent: "-$12,000.00", net: "$84,080.00" },
     "2022": { gross: "$134,200.00", cogs: "-$36,800.00", fees: "-$3,850.00", rent: "-$12,000.00", net: "$81,550.00" },
@@ -240,14 +254,14 @@
 
   function selectYear(yr) {
     document.querySelectorAll('.year-tab').forEach(b => {
-      b.className = "year-tab flex-1 py-2.5 px-3 rounded-xl font-bold text-xs bg-slate-900 text-slate-400 border border-slate-800 text-center";
+      b.className = "year-tab flex-1 min-w-[62px] py-2 px-1 rounded-xl font-bold text-xs bg-slate-900 text-slate-400 border border-slate-800 text-center";
     });
     const selectedBtn = document.getElementById(`tab${yr}`);
     if (selectedBtn) {
-      selectedBtn.className = "year-tab flex-1 py-2.5 px-3 rounded-xl font-bold text-xs bg-rose-500 text-white shadow-lg shadow-rose-500/20 text-center";
+      selectedBtn.className = "year-tab flex-1 min-w-[62px] py-2 px-1 rounded-xl font-bold text-xs bg-rose-500 text-white shadow-lg shadow-rose-500/20 text-center";
     }
 
-    document.getElementById("yearTitle").innerText = `${yr} Tax Year Breakdown`;
+    document.getElementById("yearTitle").innerText = `${yr} Breakdown`;
     const d = yearData[yr];
     if (d) {
       document.getElementById("statGross").innerText = d.gross;
