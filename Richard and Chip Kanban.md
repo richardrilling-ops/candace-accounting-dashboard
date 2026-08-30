@@ -3,7 +3,7 @@ kanban-plugin: basic
 ---
 
 ## 📋 To Do (Backlog)
-- [ ] Deploy LeaseWise static landing page to  (Vercel/Cloudflare)
+- [x] Deploy LeaseWise static landing page to  (Vercel/Cloudflare)
 - [ ] Record 30-sec A/B marketing video for LeaseWise (Dealer Exposed angle)
 - [ ] Record 30-sec A/B marketing video for LeaseWise (Stealth Weapon angle)
 - [ ] Execute guerrilla audit marketing on r/leasehackr & Leasehackr forum
